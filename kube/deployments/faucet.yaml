@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faucet
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: faucet
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faucet
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: faucet
+  template:
+    metadata:
+      labels:
+        app: faucet
+    spec:
+      containers:
+        - name: landing
+          image: jesselurie6/competitors-club-faucet:v1.0.0
+          ports:
+            - containerPort: 3000

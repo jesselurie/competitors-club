@@ -1,0 +1,113 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node2
+spec:
+  ports:
+  - name: wss
+    port: 9944
+    targetPort: 9944
+  - name: rpc
+    port: 9933
+    targetPort: 9933
+  - name: p2p
+    port: 30333
+    targetPort: 30333
+  selector:
+    app: node2
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: node2-set
+spec:
+  selector: 
+    matchLabels: 
+      app: node2
+  serviceName: "node2"
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        app: node2
+    spec: 
+      containers:
+        - name: node2
+          image: jesselurie6/competitors-club:v1.1.0
+          volumeMounts:
+          - mountPath: "/competitors-club"
+            name: node2-pvc
+          # args: ["--name","cc-node-2","--bootnodes", "/ip4/10.245.199.169/tcp/30333/p2p/12D3KooWKEnZSxxvyqRnevjbN3QW7zcge7assRzUjwyP6g9dMj2F","--node-key=6182d4322d96435d64adf1416a94fba99a02e6e112d8669d784a334d817e2701", "--base-path","/competitors-club", "--port","30333","--ws-port","9944","--rpc-port", "9933","--validator","--unsafe-ws-external", "--unsafe-rpc-external", "--rpc-methods", "Unsafe",   "--ws-external",    "--rpc-external", "--rpc-cors", "all"]
+          args: ["--name","cc-node-2","--bootnodes", "/ip4/10.245.199.169/tcp/30333/p2p/12D3KooWKEnZSxxvyqRnevjbN3QW7zcge7assRzUjwyP6g9dMj2F","--node-key=6182d4322d96435d64adf1416a94fba99a02e6e112d8669d784a334d817e2701", "--base-path","/competitors-club", "--port","30333","--ws-port","9944","--rpc-port", "9933","--validator", "--rpc-methods", "Safe"]
+          ports:
+          - name: p2p
+            containerPort: 30333
+          - name: rpc
+            containerPort: 9933
+          - name: wss
+            containerPort: 9944
+      initContainers:
+      - name: node2-pvc-permission-fix
+        image: busybox
+        command: ["/bin/chmod", "-R", "777","/competitors-club"]
+        volumeMounts:
+        - name: node2-pvc
+          mountPath: /competitors-club
+  volumeClaimTemplates:
+  - metadata:
+      name: node2-pvc
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: do-block-storage
+# kubectl patch pvc node1-pvc-node1-set-0 -p '{ "spec": { "resources": { "requests": { "storage": "25Gi" }}}}'
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: node0
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: node0
+#   template:
+#     metadata:
+#       labels:
+#         app: node0
+#     spec:
+#       containers:
+#         - name: node0
+#           image: jesselurie6/competitors-club:v1.1.0
+#           volumeMounts:
+#           - mountPath: "/competitors-club"
+#             name: node0-volume
+#           args: ["--name","cc-node-0", "--base-path","/competitors-club/node0", "--port","30333","--ws-port","9944","--rpc-port", "9933","--validator","--unsafe-ws-external", "--unsafe-rpc-external", "--rpc-methods", "Unsafe",   "--ws-external",    "--rpc-external", "--rpc-cors", "all"]
+#           ports:
+#           - name: p2p
+#             containerPort: 30333
+#           - name: rpc
+#             containerPort: 9933
+#           - name: wss
+#             containerPort: 9944
+#       initContainers:
+#       - name: node0-volume-permission-fix
+#         image: busybox
+#         command: ["/bin/chmod", "-R", "777","/competitors-club/node0"]
+#         volumeMounts:
+#         - name: node0-volume
+#           mountPath: /competitors-club/node0
+#       volumes:
+#         - name: node0-volume
+#           persistentVolumeClaim:
+#             claimName: node0-pvc-node0-set-0
+#           # env:
+#           # - name: MESSAGE
+#           #   value: Hello from the second deployment!
+#       # volumes:
+#       #   - name: cc-node0-volume
+#       #     persistentVolumeClaim:
+#       #       claimName: cc-pvc 

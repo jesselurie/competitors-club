@@ -1,0 +1,77 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: cc-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.org/websocket-services: "node0,node1,node2"
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+      - node0.competitors.club
+      - node1.competitors.club
+      - node2.competitors.club
+      - app.competitors.club
+      secretName: letsencrypt-prod
+  rules:
+  - host: app.competitors.club
+    http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: landing
+          servicePort: 3000
+  - host: node0.competitors.club
+    http:
+      paths:
+      - path: "/wss"
+        backend:
+          serviceName: node0
+          servicePort: 9944
+      - path: "/rpc"
+        backend:
+          serviceName: node0
+          servicePort: 9933
+      - path: "/"
+        backend:
+          serviceName: node0
+          servicePort: 30333
+  - host: node1.competitors.club
+    http:
+      paths:
+      - path: "/wss"
+        backend:
+          serviceName: node1
+          servicePort: 9944
+      - path: "/rpc"
+        backend:
+          serviceName: node1
+          servicePort: 9933
+      - path: "/"
+        backend:
+          serviceName: node1
+          servicePort: 30333
+  - host: node2.competitors.club
+    http:
+      paths:
+      - path: "/wss"
+        backend:
+          serviceName: node2
+          servicePort: 9944
+      - path: "/rpc"
+        backend:
+          serviceName: node2
+          servicePort: 9933
+      - path: "/"
+        backend:
+          serviceName: node2
+          servicePort: 30333
+    

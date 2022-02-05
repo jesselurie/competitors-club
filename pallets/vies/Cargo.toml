@@ -1,0 +1,63 @@
+[package]
+authors = ['Jesse Lurie <https://github.com/jesselurie>']
+description = 'FRAME pallet for defining custom runtime logic for competitors club.'
+edition = '2018'
+homepage = 'https://github.com/jesselurie'
+license = 'Unlicense'
+name = 'pallet-vies'
+readme = 'README.md'
+repository = 'https://github.com/jesselurie/competitors-club-node'
+version = '3.0.0'
+
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
+[dependencies.substrate-fixed]
+default-features = false
+git = "https://github.com/encointer/substrate-fixed"
+package = "substrate-fixed"
+features = ["f16", "serde"]
+
+[dependencies]
+serde = { version = "1.0.101", optional = true, features = ["derive"] }
+codec = { default-features = false, features = ['derive'], package = 'parity-scale-codec', version = '2.0.0' }
+frame-system = { default-features = false, version = '3.0.0' }
+frame-support = { default-features = false, version = '3.0.0' }
+frame-benchmarking = { default-features = false, optional = true, version = '3.1.0' }
+sp-std = {  default-features = false, version = '3.0.0'}
+pallet-timestamp = { default-features = false, version = '3.0.0' }
+sp-io = {  default-features = false, version = '3.0.0'}
+orml-utilities = { version = "0.4.0", default-features = false }
+orml-nft = { version = "0.4.0", default-features = false }
+orml-traits = { version = "0.4.0", default-features = false }
+sp-arithmetic = { version = "3.0.0", default-features = false }
+sp-runtime = {  default-features = false, version = '3.0.0'}
+
+[dev-dependencies]
+sp-core = { default-features = false, version = '3.0.0' }
+sp-io = { default-features = false, version = '3.0.0' }
+sp-runtime = { default-features = false, version = '3.0.0' }
+
+
+[features]
+default = ['std']
+std = [
+	"serde",
+	'codec/std',
+	'frame-support/std',
+	'frame-system/std',
+	'frame-benchmarking/std',
+	'sp-std/std',
+	'pallet-timestamp/std',
+	'sp-io/std',
+	'orml-utilities/std',
+	'orml-nft/std',
+	'orml-traits/std',
+	'substrate-fixed/std',
+	'sp-arithmetic/std',
+	'sp-runtime/std',
+]
+runtime-benchmarks = ['frame-benchmarking']
+# Note: frame-support `try-runtime` feature is released after v3.
+#   Uncomment the following line when `frame-support` version > `3.0.0`.
+# try-runtime = ['frame-support/try-runtime']

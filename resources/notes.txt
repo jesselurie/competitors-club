@@ -1,0 +1,6 @@
+https://pumpingco.de/blog/using-signalr-in-kubernetes-behind-nginx-ingress/
+https://stackoverflow.com/questions/67661698/enable-secure-websocket-connection-through-nginx-ingress-on-gke
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes
+SERIALIZE/DESERIALIZE
+https://github.com/paritytech/substrate/issues/7220
+

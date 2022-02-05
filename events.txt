@@ -1,0 +1,20 @@
+***Extrinsics*** 
+
+Game created 
+ - Store game information 
+
+Join 
+- Update game with new user joined 
+
+Game over 
+ - Update game with final podium
+
+Force Finish 
+ - Update game to finished
+
+***Events***
+All Players Joined 
+ - Update game with all players joined 
+
+
+ 

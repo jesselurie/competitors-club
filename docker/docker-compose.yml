@@ -1,0 +1,30 @@
+
+version: "3.2"
+
+services:
+  cc-node:
+    container_name: cc-node
+    image: cc-node
+    ports:
+      - "9944:9944"
+      - "9933:9933"
+      - "30333:30333"
+    volumes:
+      - ./volume:/competitors-club
+    command: [
+      "--name", "cc-node-0",
+      "--node-key=ec680e3d8f6e55fb8cb377a70ab8c7fcbf4e83a0e766d03c6e9ef40a59bfab26",
+      "--base-path", "/competitors-club/cc-node-0",
+      "--bootnodes", "/dns/node0.competitors.club/tcp/30333/p2p/12D3KooWMQUPbtHj8E1FsnteJUNfrgsUns7daq78ouMNHu2RUs34",
+      "--offchain-worker=Always",
+      "--validator",
+      "--port","30333",
+      "--ws-port","9944",
+      "--rpc-port", "9933",
+      "--unsafe-ws-external",
+      "--unsafe-rpc-external", 
+      "--rpc-methods", "Unsafe",
+      "--ws-external",
+      "--rpc-external",
+      "--rpc-cors", "all",
+    ]
